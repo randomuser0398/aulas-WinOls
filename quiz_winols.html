@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Interativo - WinOLS Básico</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #1e1e1e; color: #fff; padding: 20px; }
+        .question { margin-bottom: 15px; }
+        .answers button { margin: 5px; padding: 10px; border: none; border-radius: 5px; cursor: pointer; }
+        .answers button.correct { background-color: #4CAF50; }
+        .answers button.wrong { background-color: #f44336; }
+        .feedback { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Quiz Interativo - WinOLS Básico</h1>
+    <div id="quiz-container"></div>
+    <script>
+        const quiz = [
+            {
+                question: "Qual é a principal função do software WinOLS?",
+                options: [
+                    "Criar diagramas elétricos",
+                    "Modificar mapas de controle de motor em arquivos binários",
+                    "Simular injeção de combustível",
+                    "Realizar alinhamento de rodas"
+                ],
+                answer: 1,
+                explanation: "O WinOLS é especializado na modificação de mapas de ECU a partir de arquivos binários."
+            },
+            {
+                question: "Quais são as três formas de visualizar os mapas no WinOLS?",
+                options: ["Texto, 2D, 3D", "Gráfico, Numérico, Hexadecimal", "Tabela, Lista, Mapa", "3D, Gráfico de Barras, Texto"],
+                answer: 0,
+                explanation: "O WinOLS permite visualizar os mapas em Texto, 2D e 3D para facilitar o entendimento dos dados."
+            },
+            {
+                question: "O que é a soma de verificação (Checksum)?",
+                options: ["Um método de compressão de dados", "Um protocolo de comunicação", "Um cálculo que garante a integridade dos dados da ECU", "Uma técnica de visualização gráfica"],
+                answer: 2,
+                explanation: "O Checksum é um cálculo que verifica se os dados da ECU não foram corrompidos."
+            },
+            {
+                question: "Para que servem os arquivos DAMOS no contexto do WinOLS?",
+                options: ["Para criar gráficos", "Para definir os mapas e suas características na ECU", "Para salvar logs de erro", "Para atualizar o firmware da ECU"],
+                answer: 1,
+                explanation: "Os arquivos DAMOS são usados para definir mapas e fornecer informações detalhadas sobre os dados da ECU."
+            },
+            {
+                question: "O que significa a sigla MAP na calibração de motores?",
+                options: ["Módulo de Análise de Potência", "Sensor de Pressão Absoluta no Coletor", "Matriz de Ajuste de Potência", "Monitor de Ar e Pressão"],
+                answer: 1,
+                explanation: "MAP significa 'Manifold Absolute Pressure', ou seja, Sensor de Pressão Absoluta no Coletor."
+            }
+        ];
+
+        let current = 0;
+
+        function loadQuestion() {
+            if (current >= quiz.length) {
+                document.getElementById('quiz-container').innerHTML = "<h2>Fim do Quiz! Parabéns por concluir!</h2>";
+                return;
+            }
+            const q = quiz[current];
+            let html = `<div class='question'><strong>Pergunta ${current + 1}:</strong> ${q.question}</div><div class='answers'>`;
+            q.options.forEach((opt, idx) => {
+                html += `<button onclick='checkAnswer(${idx})'>${opt}</button>`;
+            });
+            html += "</div><div id='feedback' class='feedback'></div>";
+            document.getElementById('quiz-container').innerHTML = html;
+        }
+
+        function checkAnswer(selected) {
+            const q = quiz[current];
+            const buttons = document.querySelectorAll('.answers button');
+            buttons.forEach((btn, idx) => {
+                if (idx === q.answer) btn.classList.add('correct');
+                else btn.classList.add('wrong');
+                btn.disabled = true;
+            });
+            document.getElementById('feedback').innerHTML = `<p><strong>Explicação:</strong> ${q.explanation}</p><button onclick='nextQuestion()'>Próxima Pergunta</button>`;
+        }
+
+        function nextQuestion() {
+            current++;
+            loadQuestion();
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
